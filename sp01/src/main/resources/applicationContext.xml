@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		https://www.springframework.org/schema/beans/spring-beans.xsd">
+	<bean id="speaker" class="com.container.Applespeaker"></bean> 
+	<bean id="tv" class="com.factory.SamsungTV">
+		<!--<constructor-arg ref="speaker"></constructor-arg>-->
+		<property name="speaker" ref="speaker"></property><!-- name은 실제 사용하는곳의 필드명, ref는 쓰고자하는 bean의 id -->
+	</bean>
+		
+</beans>

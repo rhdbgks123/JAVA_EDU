@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.BoardMapper">
+	 <resultMap type = "BoardVO" id = "boardmap">
+		<id column = "bno" property = "boardno"/>
+		<result column = "title" property = "boardtitle"/>
+	</resultMap>
+	 <resultMap type = "ReplyVO" id = "reply">
+		<id column = "rno" property = "rno"/>
+		<result column = "title" property = "boardtitle"/>
+	</resultMap>	
+	<select id="getList" resultMap = "boardmap">
+		SELECT bno
+			 , title
+			 , content
+			 , writer
+			 , regdate
+			 , updatedate
+		  FROM tbl_board
+	</select>
+	
+	<select id="getListByWriter">
+		SELECT * 
+		  FROM tbl_board
+		 <where>
+		 	<if test="writer != null">AND writer like '%' || #{writer} || '%'</if>
+		    <if test="title != null">AND title like '%' || #{title} || '%'</if>
+		 </where>
+	</select>
+	
+	<insert id = "boardInsert" parameterType = "board">
+		<selectKey keyProperty ="bno" order="BEFORE" resultType="int">
+		SELECT SEQ_BOARD.NEXTVAL FROM DUAL
+		</selectKey>
+		insert into tbl_board (bno
+			 , title
+			 , content
+			 , writer
+			 , regdate
+			 , updatedate)
+		values ( #{bno}, #{title},#{content},#{writer},sysdate,sysdate)
+	</insert>
+	
+	<update id="boardUpdate">
+		update tbl_board
+		   set title = #{boardtitle}
+		     , content = #{content}
+		 where bno = #{boardno}
+	</update>
+	
+	<delete id="boardDelete">
+		delete from tbl_board
+		 where bno = #{boardno}
+	</delete>
+</mapper>
