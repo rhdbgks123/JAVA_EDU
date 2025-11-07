@@ -34,6 +34,17 @@
 		 ORDER BY brd.bno
 	</select>
 	
+	<select id="getBoard" >
+		SELECT brd.bno
+			 , brd.title
+			 , brd.content
+			 , brd.writer
+			 , brd.regdate
+			 , brd.updatedate
+		  FROM tbl_board brd
+		 WHERE brd.bno = #{bno}
+	</select>
+		
 	<select id="getListByWriter">
 		SELECT * 
 		  FROM tbl_board
@@ -43,7 +54,7 @@
 		 </where>
 	</select>
 	
-	<insert id = "boardInsert" parameterType = "board">
+	<insert id = "boardInsert" parameterType = "com.yedam.board.ReplyVO">
 		<selectKey keyProperty ="bno" order="BEFORE" resultType="int">
 		SELECT SEQ_BOARD.NEXTVAL FROM DUAL
 		</selectKey>
@@ -58,13 +69,12 @@
 	
 	<update id="boardUpdate">
 		update tbl_board
-		   set title = #{boardtitle}
+		   set title = #{title}
 		     , content = #{content}
-		 where bno = #{boardno}
+		 where bno = #{bno}
 	</update>
 	
-	<delete id="boardDelete">
-		delete from tbl_board
-		 where bno = #{boardno}
+	<delete id="boardDelete" statementType="CALLABLE" parameterType="map">
+		{ CALL SP_BOARD_DELETE(#{bno},#{result, mode=OUT, jdbcType=VARCHAR, javaType=string})}
 	</delete>
 </mapper>

@@ -8,5 +8,6 @@
 </head>
 <body>
 <h1>안녕하세요</h1>
+<img src="/files/고양이.jpg" width="300">
 </body>
 </html>

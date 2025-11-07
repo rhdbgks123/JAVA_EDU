@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedam.board.mapper.BoardMapper">
+<resultMap id="boardMap" type="com.yedam.board.service.BoardVO">
+    <id property="bno" column="bno" />
+    <result property="title" column="title" />
+    <result property="content" column="content" />
+    <result property="writer" column="writer" />
+    <result property="regdate" column="regdate" />
+    <result property="updatedate" column="updatedate" />
+    
+    <!-- reply 리스트 매핑 -->
+    <collection property="reply" ofType="com.yedam.board.service.ReplyVO">
+        <id property="rno" column="rno"/>
+        <result property="reply" column="reply"/>
+        <result property="replyer" column="replyer"/>
+        <result property="replydate" column="replydate"/>
+        <result property="updatedate" column="updatedate"/>
+    </collection>
+</resultMap>
+	<select id="getList" resultMap="boardMap">
+		SELECT brd.bno
+			 , brd.title
+			 , brd.content
+			 , brd.writer
+			 , brd.regdate
+			 , brd.updatedate
+			 , rpl.rno
+			 , rpl.reply
+			 , rpl.replyer
+		  FROM tbl_board brd
+		  LEFT JOIN tbl_reply rpl
+		    ON brd.bno = rpl.bno
+		 ORDER BY brd.bno
+	</select>
+	
+	<select id="getBoard" >
+		SELECT brd.bno
+			 , brd.title
+			 , brd.content
+			 , brd.writer
+			 , brd.regdate
+			 , brd.updatedate
+		  FROM tbl_board brd
+		 WHERE brd.bno = #{bno}
+	</select>
+		
+	<select id="getListByWriter">
+		SELECT * 
+		  FROM tbl_board
+		 <where>
+		 	<if test="writer != null">AND writer like '%' || #{writer} || '%'</if>
+		    <if test="title != null">AND title like '%' || #{title} || '%'</if>
+		 </where>
+	</select>
+	
+	<insert id = "boardInsert" parameterType = "com.yedam.board.service.ReplyVO">
+		<selectKey keyProperty ="bno" order="BEFORE" resultType="int">
+		SELECT SEQ_BOARD.NEXTVAL FROM DUAL
+		</selectKey>
+		insert into tbl_board (bno
+			 , title
+			 , content
+			 , writer
+			 , regdate
+			 , updatedate)
+		values ( #{bno}, #{title},#{content},#{writer},sysdate,sysdate)
+	</insert>
+	
+	<update id="boardUpdate">
+		update tbl_board
+		   set title = #{title}
+		     , content = #{content}
+		 where bno = #{bno}
+	</update>
+	
+	<delete id="boardDelete" statementType="CALLABLE" parameterType="map">
+		{ CALL SP_BOARD_DELETE(#{bno},#{result, mode=OUT, jdbcType=VARCHAR, javaType=string})}
+	</delete>
+</mapper>

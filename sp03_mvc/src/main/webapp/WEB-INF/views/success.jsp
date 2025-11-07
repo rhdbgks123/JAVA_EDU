@@ -1,0 +1,23 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h1>가입완료</h1>
+<h2>${param.msg}</h2>
+<h2>${param.name}</h2>
+${param.sampleDTO.name }
+${param.sampleDTO.age }
+${param.sampleDTO }
+<script>
+let msg = "${msg}";
+if(msg){
+	alert(msg);
+}
+</script>
+</body>
+</html>

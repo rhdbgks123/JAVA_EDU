@@ -1,6 +1,7 @@
 package com.yedam.board.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import com.yedam.board.BoardVO;
 
@@ -14,9 +15,9 @@ public interface BoardMapper {
 	//수정
 	int boardUpdate(BoardVO board);
 	//삭제
-	int boardDelete(int boardno);
+	int boardDelete(Map<String, Object> map);
 	//단건조회
-	
+	BoardVO getBoard(int bno);
 	//전체조회
 //	@Select("select * from tbl_board")
 	List<BoardVO> getList();
