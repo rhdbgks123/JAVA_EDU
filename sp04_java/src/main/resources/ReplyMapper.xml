@@ -10,6 +10,7 @@
 			 , rpl.updatedate
 		  FROM tbl_reply rpl
 		 WHERE rpl.bno = #{bno}
+		 ORDER BY rpl.rno desc
 	</select>
 	
 		

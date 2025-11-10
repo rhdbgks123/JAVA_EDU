@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>emp.html</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+        crossorigin="anonymous"></script>
+</head>
+<body>
+<h3>사원관리</h3>
+<table>
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>이름</th>
+			<th>이메일</th>
+			<th>고용일</th>
+			<th>급여</th>
+		</tr>
+	</thead>
+	<tbody id="empList" style = "text-align:center">
+	</tbody>
+</table>
+<script>
+getList();
+
+function getList(){
+	fetch("/emp")
+	.then(response => response.json())
+	.then(result => {
+		for(data of result){
+			console.log(data);
+			let newTag = `		<tr>
+				<td>${data.employeeId}</td>
+				<td>${data.firstName} ${data.lastName}</td>
+				<td>${data.email}</td>
+				<td>${data.hireDate}</td>
+				<td style = "text-align:right">${data.salary}</td>
+			</tr>`;
+			$('#empList').append(newTag);
+		}
+		
+	})
+}
+</script>
+</body>
+</html>
