@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,13 +14,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.yedam.board.BoardVO;
 import com.yedam.board.mapper.BoardMapper;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @Controller
 public class BoardController {
 	@Autowired BoardMapper boardMapper;
 	
 	@GetMapping("/board")
-	public String selectall(Model model) {
+	public String selectall(Model model, HttpServletRequest req, @CookieValue("JSESSIONID") String sessionid) {
 		model.addAttribute("list", boardMapper.getList());
+		System.out.println("client ip : " + req.getRemoteAddr());
+		System.out.println("user-agent : " + req.getHeader("user-agent"));
+
+		System.out.println("coockies : " + req.getCookies());
+		System.out.println("COOKIES2 " + sessionid);
 		return "board/list";
 	}
 //	@GetMapping("/board/register")
